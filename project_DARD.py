@@ -140,7 +140,17 @@ def generate_pdf(user_info, diagnosis, confidence, image_file, pdf_link):
 
 # =============== Streamlit UI ===================
 st.set_page_config(page_title="DARD: Diabetes-Associated Retinal Detection", layout="wide")
-
+# Adaptive background color based on theme
+st.markdown(
+    """
+    <style>
+    [data-testid="stAppViewContainer"] {
+        background-color: var(--background-color);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # ----------- Welcome page logic ---------------
 if "started" not in st.session_state:
     st.session_state.started = False
@@ -151,20 +161,106 @@ if "diagnosis_completed" not in st.session_state:
 if not st.session_state.started:
     st_lottie(animation_welcome, height=300)
     st.markdown('<h1 style="text-align:center; color:#4A90E2;">👁️ Welcome to DARD System</h1>', unsafe_allow_html=True)
+    
+    st.markdown("<h3 style='text-align: center; color: #555;'>Diabetes Associated Retinal Detection</h3>", unsafe_allow_html=True)
+
+    st.markdown("""<hr style="border:1px solid #4CAF50">""", unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="background-color: #f0f8ff; padding: 20px; border-radius: 10px;">
+    <p style="font-size:18px; color:#333;">
+    <b>DARD</b> is an <span style="color:#ff5722;"><b>AI-powered diagnostic tool</b></span> designed to assist healthcare professionals in the early detection and classification of <b>Diabetic Retinopathy (DR)</b>.  
+    Our platform enables doctors to <b>upload retinal images</b> and instantly receive a detailed, downloadable report outlining the severity of any detected retinal changes.
+    </p>
+
+    <p style="font-size:18px; color:#333;">
+    We aim to support <b>early intervention</b> and <b>improve patient outcomes</b> by providing <span style="color:#ff5722;"><b>fast, accurate, and easy-to-use</b></span> screening assistance.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""<br>""", unsafe_allow_html=True)
+
+    st.subheader("🔍 About the Model")
+
+    st.markdown("""
+    <div style="background-color: #fff3e0; padding: 20px; border-radius: 10px;">
+    <p style="font-size:18px; color:#333;">
+    Our model is built using advanced deep learning techniques, specifically <b>Convolutional Neural Networks (CNNs)</b>, trained on thousands of annotated retinal images.
+    </p>
+
+    <ul style="font-size:18px; color:#333;">
+      <li><b>Trained</b> on diverse datasets from real-world diabetic retinopathy cases.</li>
+      <li>Capable of classifying retinal images into five stages: <b>No DR, Mild, Moderate, Severe, and Proliferative DR</b>.</li>
+      <li>Achieved <b>high performance metrics</b> with an emphasis on <span style="color:#ff5722;">accuracy</span>, <span style="color:#ff5722;">sensitivity</span>, and <span style="color:#ff5722;">specificity</span>.</li>
+      <li>Designed for <b>generalization</b> across varied image qualities and patient demographics.</li>
+    </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""<br>""", unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="background-color: #ffebee; padding: 15px; border-radius: 8px;">
+    <p style="font-size:16px; color:#c62828;">
+    <b>Note:</b> DARD provides <b>diagnostic support</b>, not a final medical diagnosis.<br>
+    Clinical judgment by a qualified doctor remains essential.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
     if st.button("Enter DARD System"):
         st.session_state.started = True
 else:
     # ORIGINAL APP STARTS HERE (your full existing code)
-    # Sidebar for hospital & doctor info
-    st.sidebar.header("Hospital Details")
-    hospital_name = st.sidebar.text_input("Hospital Name")
-    doctor_name = st.sidebar.text_input("Doctor's Name")
-
+    with st.sidebar.expander("📋 **Diagnosis Summary Guide**", expanded=False):
+        st.markdown("""
+    ### 🩺 0 - No_DR
+    - **Result:** No signs of diabetic retinopathy detected.
+    - **Advice:** Routine monitoring recommended. Schedule next screening in 12 months unless symptoms develop.
+    - **Clinical Observation:** No abnormalities such as microaneurysms, hemorrhages, or exudates were detected.
+    
+    ### 🩺 1 - Mild
+    - **Result:** Early signs of diabetic retinopathy detected (Mild non-proliferative DR).
+    - **Advice:** Recommend follow-up in 6-12 months. Control blood sugar levels and monitor eye health.
+    - **Clinical Observation:** Presence of microaneurysms observed.
+    
+    ### 🩺 2 - Moderate
+    - **Result:** Moderate non-proliferative diabetic retinopathy detected.
+    - **Advice:** Closer monitoring advised. Follow-up within 3-6 months. May require treatment depending on progression.
+    - **Clinical Observation:** Microaneurysms and hemorrhages detected.
+    
+    ### 🩺 3 - Severe
+    - **Result:** Severe non-proliferative diabetic retinopathy detected.
+    - **Advice:** High risk of progression. Immediate referral to an ophthalmologist is recommended.
+    - **Clinical Observation:** Multiple hemorrhages and cotton wool spots observed.
+    
+    ### 🩺 4 - Proliferative_DR
+    - **Result:** Proliferative diabetic retinopathy detected (advanced stage).
+    - **Advice:** Urgent referral needed. High risk of vision loss. Immediate intervention required.
+    - **Clinical Observation:** Neovascularization and vitreous hemorrhage signs detected.
+        """)
+    
     # Main horizontal layout
-    col_left, col_right = st.columns([1, 2])
+    empty, col_left, col_right = st.columns([1, 2, 1])
 
     with col_left:
-        st.subheader("Patient Information")
+        st.markdown('''
+        <div style="background-color: #fff2cc; padding: 20px; border-radius: 12px; margin-top: 20px; margin-bottom: 20px;">
+            <h4 style="color: #7F6000;">🩺 Doctor Information</h4>
+        </div>
+    ''', unsafe_allow_html=True)
+        #st.header("Hospital Details")
+        hospital_name = st.text_input("Hospital Name")
+        doctor_name = st.text_input("Doctor's Name")
+
+        st.markdown('''
+            <div style="background-color: #fff2cc; padding: 20px; border-radius: 12px;">
+                <h4 style="color: #0B5394;">🧑‍⚕️ Patient Information</h4>
+            </div>
+        ''', unsafe_allow_html=True)
+
+        #st.subheader("Patient Information")
         name = st.text_input("Patient Name")
         age = st.number_input("Age", min_value=1, step=1)
         gender = st.selectbox("Gender", ["Male", "Female", "Other"])
