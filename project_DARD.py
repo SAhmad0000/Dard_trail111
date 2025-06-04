@@ -151,6 +151,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 # ----------- Welcome page logic ---------------
 if "started" not in st.session_state:
     st.session_state.started = False
@@ -160,59 +161,35 @@ if "diagnosis_completed" not in st.session_state:
 
 if not st.session_state.started:
     st_lottie(animation_welcome, height=300)
-    st.markdown('<h1 style="text-align:center; color:#4A90E2;">👁️ Welcome to DARD System</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align:center; color:#4A90E2;"> Welcome to DARD System</h1>', unsafe_allow_html=True)
     
     st.markdown("<h3 style='text-align: center; color: #555;'>Diabetes Associated Retinal Detection</h3>", unsafe_allow_html=True)
 
-    st.markdown("""<hr style="border:1px solid #4CAF50">""", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([3, 1, 3])
+    with col2:
+        if st.button("Enter DARD System"):
+            st.session_state.started = True
+            st.rerun()
 
-    st.markdown("""
-    <div style="background-color: #f0f8ff; padding: 20px; border-radius: 10px;">
-    <p style="font-size:18px; color:#333;">
-    <b>DARD</b> is an <span style="color:#ff5722;"><b>AI-powered diagnostic tool</b></span> designed to assist healthcare professionals in the early detection and classification of <b>Diabetic Retinopathy (DR)</b>.  
-    Our platform enables doctors to <b>upload retinal images</b> and instantly receive a detailed, downloadable report outlining the severity of any detected retinal changes.
-    </p>
-
-    <p style="font-size:18px; color:#333;">
-    We aim to support <b>early intervention</b> and <b>improve patient outcomes</b> by providing <span style="color:#ff5722;"><b>fast, accurate, and easy-to-use</b></span> screening assistance.
-    </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""<br>""", unsafe_allow_html=True)
-
-    st.subheader("🔍 About the Model")
-
-    st.markdown("""
-    <div style="background-color: #fff3e0; padding: 20px; border-radius: 10px;">
-    <p style="font-size:18px; color:#333;">
-    Our model is built using advanced deep learning techniques, specifically <b>Convolutional Neural Networks (CNNs)</b>, trained on thousands of annotated retinal images.
-    </p>
-
-    <ul style="font-size:18px; color:#333;">
-      <li><b>Trained</b> on diverse datasets from real-world diabetic retinopathy cases.</li>
-      <li>Capable of classifying retinal images into five stages: <b>No DR, Mild, Moderate, Severe, and Proliferative DR</b>.</li>
-      <li>Achieved <b>high performance metrics</b> with an emphasis on <span style="color:#ff5722;">accuracy</span>, <span style="color:#ff5722;">sensitivity</span>, and <span style="color:#ff5722;">specificity</span>.</li>
-      <li>Designed for <b>generalization</b> across varied image qualities and patient demographics.</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""<br>""", unsafe_allow_html=True)
-
-    st.markdown("""
-    <div style="background-color: #ffebee; padding: 15px; border-radius: 8px;">
-    <p style="font-size:16px; color:#c62828;">
-    <b>Note:</b> DARD provides <b>diagnostic support</b>, not a final medical diagnosis.<br>
-    Clinical judgment by a qualified doctor remains essential.
-    </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    if st.button("Enter DARD System"):
-        st.session_state.started = True
 else:
     # ORIGINAL APP STARTS HERE (your full existing code)
+    with st.sidebar.expander("🌐 **About System**", expanded=False):    
+        st.markdown("""
+    DARD is an AI-powered diagnostic tool designed to assist healthcare professionals in the early detection and classification of Diabetic Retinopathy (DR). 
+                     
+    - Our platform enables doctors to upload retinal images and instantly receive a detailed, downloadable report outlining the severity of any detected retinal changes.
+    - We aim to support early intervention and improve patient outcomes by providing fast, accurate, and easy-to-use screening assistance.
+        """)
+    with st.sidebar.expander("🔍 **About the Model**", expanded=False):    
+        st.markdown("""
+    Our model is built using advanced deep learning techniques, specifically Convolutional Neural Networks (CNNs), trained on thousands of annotated retinal images.
+    
+    - Trained on diverse datasets from real-world diabetic retinopathy cases.
+    - Capable of classifying retinal images into five stages: No DR, Mild, Moderate, Severe, and Proliferative DR.
+    - Achieved high performance metrics with an emphasis on sensitivity and specificity.
+    - Designed for generalization across varied image qualities and patient demographics.
+        """)
+
     with st.sidebar.expander("📋 **Diagnosis Summary Guide**", expanded=False):
         st.markdown("""
     ### 🩺 0 - No_DR
@@ -241,36 +218,46 @@ else:
     - **Clinical Observation:** Neovascularization and vitreous hemorrhage signs detected.
         """)
     
+    with st.sidebar.expander("⚠️ **Disclaimer**", expanded=False):    
+        st.markdown("""
+    - DARD provides <b>diagnostic support, not a final medical diagnosis.
+    - Clinical judgment by a qualified doctor remains essential.
+        """)
+
     # Main horizontal layout
     empty, col_left, col_right = st.columns([1, 2, 1])
-
+    
     with col_left:
-        st.markdown('''
-        <div style="background-color: #fff2cc; padding: 20px; border-radius: 12px; margin-top: 20px; margin-bottom: 20px;">
-            <h4 style="color: #7F6000;">🩺 Doctor Information</h4>
-        </div>
-    ''', unsafe_allow_html=True)
-        #st.header("Hospital Details")
-        hospital_name = st.text_input("Hospital Name")
-        doctor_name = st.text_input("Doctor's Name")
-
-        st.markdown('''
-            <div style="background-color: #fff2cc; padding: 20px; border-radius: 12px;">
-                <h4 style="color: #0B5394;">🧑‍⚕️ Patient Information</h4>
+        with st.form("patient_form", clear_on_submit=False):
+            st.markdown('''
+                <div style="background-color: #fff2cc; padding: 20px; border-radius: 12px; margin-top: 20px; margin-bottom: 20px;">
+                <h4 style="color: #7F6000;">🩺 Doctor Information</h4>
             </div>
-        ''', unsafe_allow_html=True)
+            ''', unsafe_allow_html=True)
+        
+            #st.header("Hospital Details")
+            hospital_name = st.text_input("Hospital Name")
+            doctor_name = st.text_input("Doctor's Name")
 
-        #st.subheader("Patient Information")
-        name = st.text_input("Patient Name")
-        age = st.number_input("Age", min_value=1, step=1)
-        gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-        date = st.date_input("Date", now_ist.date()).strftime("%Y-%m-%d")
-        time_input = st.time_input("Time", now_ist.time())
-        time_str = time_input.strftime("%H:%M:%S")
-        address = st.text_area("Address")
-        image_file = st.file_uploader("Upload Retinal Image", type=["jpg", "jpeg", "png"])
+            st.markdown('''
+                <div style="background-color: #fff2cc; padding: 20px; border-radius: 12px;">
+                  <h4 style="color: #0B5394;">🧑‍⚕️ Patient Information</h4>
+                </div>
+            ''', unsafe_allow_html=True)
 
-        submitted = st.button("Diagnose & Generate Report")
+            #st.subheader("Patient Information")
+        
+            name = st.text_input("Patient Name")
+            age = st.number_input("Age", min_value=1, step=1)
+            gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+            date = st.date_input("Date", now_ist.date()).strftime("%Y-%m-%d")
+            time_input = st.time_input("Time", now_ist.time())
+            time_str = time_input.strftime("%H:%M:%S")
+            address = st.text_area("Address")
+            image_file = st.file_uploader("Upload Retinal Image", type=["jpg", "jpeg", "png"])
+
+            #submitted = st.button("Diagnose & Generate Report")
+            submitted = st.form_submit_button("Submit")
 
     with col_right:
         animation_placeholder = st.empty()
@@ -285,7 +272,7 @@ else:
             with animation_placeholder:
                 st_lottie(animation_processing, height=150)
 
-            time.sleep(2)
+            #time.sleep(2)
 
             img = PILImage.open(image_file).convert("RGB")
             if not is_retinal_image(img):
@@ -297,7 +284,7 @@ else:
 
                 progress = st.progress(0)
                 for i in range(100):
-                    time.sleep(0.01)
+                    #time.sleep(0.01)
                     progress.progress(i + 1)
 
                 diagnosis, confidence = classify_image(img)
@@ -344,7 +331,7 @@ else:
                     with animation_placeholder:
                         st.lottie(animation_processing, height=100)
 
-                    time.sleep(1)
+                    #time.sleep(1)
 
                     pdf_path = generate_pdf(user_info, diagnosis, confidence, img, pdf_link)
 
