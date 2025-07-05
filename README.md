@@ -98,7 +98,7 @@ Diabetic Retinopathy (DR) is a complication of diabetes that affects the eyes an
 ## 🚀 About Me
 **Name:** Sameer Ahmad
 
-**GitHUb:** SAhmad0000
+**GitHub:** SAhmad0000
 
 ---
 
