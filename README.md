@@ -104,7 +104,7 @@ Diabetic Retinopathy (DR) is a complication of diabetes that affects the eyes an
 
 ## 🙏 Acknowledgements
 
- - [Kaggle]("sovitrath/diabetic-retinopathy-224x224-2019-data"): For Diabetic Retinopathy Retinal Image Datase.
+ - [Kaggle]("sovitrath/diabetic-retinopathy-224x224-2019-data"): For Diabetic Retinopathy Retinal Image Datasets.
 
  - [Website](https://dardtrail111.streamlit.app/): Website Address.
 
